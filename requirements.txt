@@ -2,4 +2,11 @@
     flask
     pytest
     cryptography
-    
+    tensorflow
+transformers
+geojson
+pycryptodome
+scrapy
+federated-learning
+flask-socketio
+pandas

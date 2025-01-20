@@ -1,47 +1,33 @@
 
-import pytest
-from flask import Flask
+import unittest
 from app import app
 
-@pytest.fixture
-def client():
-    with app.test_client() as client:
-        yield client
+class LogisticsManagementTests(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+        self.app.testing = True
 
-# Test the home route
-def test_home(client):
-    response = client.get('/')
-    assert response.status_code == 200
-    assert b'Logistics Management System is fully functional.' in response.data
+    def test_home(self):
+        response = self.app.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Logistics Management", response.get_json()["message"])
 
-# Test the encryption route
-def test_encrypt(client):
-    data = {"data": "Test message"}
-    response = client.post('/encrypt', json=data)
-    assert response.status_code == 200
-    assert "encrypted_data" in response.get_json()
+    def test_analyze_logistics(self):
+        response = self.app.post('/analyze_logistics', json={"logistics_report": "Critical shortage of supplies."})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("analysis", response.get_json())
 
-# Test the decryption route
-def test_decrypt(client):
-    data = {"data": "Test message"}
-    encrypt_response = client.post('/encrypt', json=data)
-    encrypted_data = encrypt_response.get_json()["encrypted_data"]
+    def test_track_shipment(self):
+        shipment_data = {"latitude": 34.05, "longitude": -118.25, "status": "Delivered"}
+        response = self.app.post('/track_shipment', json=shipment_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("message", response.get_json())
 
-    decrypt_response = client.post('/decrypt', json={"encrypted_data": encrypted_data})
-    assert decrypt_response.status_code == 200
-    assert decrypt_response.get_json()["decrypted_data"] == "Test message"
+    def test_inventory_management(self):
+        inventory_data = {"inventory": [{"item": "Product A", "quantity": 50}, {"item": "Product B", "quantity": 30}]}
+        response = self.app.post('/inventory', json=inventory_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("inventory_analysis", response.get_json())
 
-# Test the inventory route (GET)
-def test_inventory_get(client):
-    response = client.get('/inventory')
-    assert response.status_code == 200
-    inventory = response.get_json()
-    assert isinstance(inventory, list)
-    assert len(inventory) > 0
-
-# Test the inventory route (POST)
-def test_inventory_post(client):
-    data = {"item": "Water Bottles", "quantity": 100}
-    response = client.post('/inventory', json=data)
-    assert response.status_code == 200
-    assert "Added 100 units of Water Bottles to inventory." in response.get_json()["message"]
+if __name__ == '__main__':
+    unittest.main()

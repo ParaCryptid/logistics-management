@@ -1,14 +1,76 @@
 
-# Logistics_Management
-This repository is designed as part of a military-grade system. It is self-sufficient, secure, and user-friendly.
-## Features
-- Event-driven architecture with Kafka and RabbitMQ
-- AI and ML integration with OpenCV, ONNX, and NVIDIA Triton
-- Offline support with auto-save and seamless synchronization
-- Advanced security measures: Zero Trust and Quantum-Safe Encryption
-- Fully compliant with ISO 27001, GDPR, and DARPA standards
-## Getting Started
-Follow the steps below to set up and use this system.
-1. Install dependencies using `requirements.txt`.
-2. Run the setup scripts in the `configurations` folder.
-3. Use `README.md` for detailed usage instructions.
+# Logistics Management
+
+## Overview
+The Logistics Management repository has been enhanced with new features to optimize operations and ensure secure collaboration.
+
+### New Features
+1. **AI-Driven Logistics Analysis**
+    - Endpoint: `/analyze_logistics`
+    - Method: `POST`
+    - Description: Analyzes logistics reports for sentiment and insights.
+    - Example Request:
+      ```json
+      {
+          "logistics_report": "Inventory levels are critically low."
+      }
+      ```
+    - Example Response:
+      ```json
+      {
+          "analysis": [{"label": "NEGATIVE", "score": 0.95}]
+      }
+      ```
+
+2. **Real-Time Monitoring**
+    - Enables real-time communication for shipment and inventory updates using Flask-SocketIO.
+
+3. **Geospatial Tracking**
+    - Endpoint: `/track_shipment`
+    - Method: `POST`
+    - Description: Tracks and updates the geospatial location of shipments.
+    - Example Request:
+      ```json
+      {
+          "latitude": 34.05,
+          "longitude": -118.25,
+          "status": "In Transit"
+      }
+      ```
+    - Example Response:
+      ```json
+      {
+          "message": "Shipment location updated successfully",
+          "shipment": {...}
+      }
+      ```
+
+4. **Inventory Management**
+    - Endpoint: `/inventory`
+    - Method: `POST`
+    - Description: Analyzes inventory data for insights and optimization.
+    - Example Request:
+      ```json
+      {
+          "inventory": [
+              {"item": "Product A", "quantity": 50},
+              {"item": "Product B", "quantity": 30}
+          ]
+      }
+      ```
+    - Example Response:
+      ```json
+      {
+          "inventory_analysis": {...}
+      }
+      ```
+
+### Getting Started
+1. Install dependencies from `requirements.txt`:
+    ```bash
+    pip install -r requirements.txt
+    ```
+2. Run the application:
+    ```bash
+    python app.py
+    ```
